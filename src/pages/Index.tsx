@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Icon from "@/components/ui/icon";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Recipe {
   id: number;
@@ -14,8 +19,51 @@ interface Recipe {
   instructions: string[];
 }
 
+interface OrderFormData {
+  volume: string;
+  quantity: number;
+  name: string;
+  phone: string;
+  address: string;
+}
+
 const Index = () => {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [isOrderFormOpen, setIsOrderFormOpen] = useState(false);
+  const [orderForm, setOrderForm] = useState<OrderFormData>({
+    volume: "500",
+    quantity: 1,
+    name: "",
+    phone: "",
+    address: ""
+  });
+
+  const volumePrices: { [key: string]: number } = {
+    "330": 89,
+    "500": 129,
+    "1000": 199,
+    "2000": 349
+  };
+
+  const calculateTotal = () => {
+    const basePrice = volumePrices[orderForm.volume] || 0;
+    const discount = orderForm.quantity >= 5 ? 0.1 : 0;
+    const subtotal = basePrice * orderForm.quantity;
+    return Math.round(subtotal * (1 - discount));
+  };
+
+  const handleOrderSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast.success(`Заказ оформлен! Сумма: ${calculateTotal()} ₽`);
+    setIsOrderFormOpen(false);
+    setOrderForm({
+      volume: "500",
+      quantity: 1,
+      name: "",
+      phone: "",
+      address: ""
+    });
+  };
 
   const recipes: Recipe[] = [
     {
@@ -148,7 +196,7 @@ const Index = () => {
             <a href="#about" className="hover:text-primary transition-colors">О продукте</a>
             <a href="#recipes" className="hover:text-primary transition-colors">Рецепты</a>
           </nav>
-          <Button size="lg" className="hidden md:flex">
+          <Button size="lg" className="hidden md:flex" onClick={() => setIsOrderFormOpen(true)}>
             <Icon name="ShoppingCart" className="mr-2" size={20} />
             Заказать
           </Button>
@@ -169,11 +217,13 @@ const Index = () => {
                 Традиционный кавказский напиток, который лечит туберкулёз и укрепляет здоровье
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button size="lg" className="text-lg px-8">
+                <Button size="lg" className="text-lg px-8" onClick={() => setIsOrderFormOpen(true)}>
                   <Icon name="ShoppingBag" className="mr-2" size={24} />
                   Купить айран
                 </Button>
-                <Button size="lg" variant="outline" className="text-lg px-8">
+                <Button size="lg" variant="outline" className="text-lg px-8" onClick={() => {
+                  document.getElementById('recipes')?.scrollIntoView({ behavior: 'smooth' });
+                }}>
                   <Icon name="ChefHat" className="mr-2" size={24} />
                   Смотреть рецепты
                 </Button>
@@ -377,6 +427,174 @@ const Index = () => {
               </Card>
             </div>
           )}
+
+          {isOrderFormOpen && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setIsOrderFormOpen(false)}>
+              <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-scale-in" onClick={(e) => e.stopPropagation()}>
+                <CardHeader className="border-b">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-3xl">Оформить заказ</CardTitle>
+                      <CardDescription className="text-base mt-2">Заполните форму и мы свяжемся с вами для подтверждения</CardDescription>
+                    </div>
+                    <Button 
+                      size="icon" 
+                      variant="ghost"
+                      onClick={() => setIsOrderFormOpen(false)}
+                    >
+                      <Icon name="X" size={20} />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-6">
+                  <form onSubmit={handleOrderSubmit} className="space-y-6">
+                    <div className="space-y-4">
+                      <Label className="text-lg font-semibold">Выберите объем</Label>
+                      <RadioGroup value={orderForm.volume} onValueChange={(value) => setOrderForm({...orderForm, volume: value})}>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="relative">
+                            <RadioGroupItem value="330" id="vol-330" className="peer sr-only" />
+                            <Label htmlFor="vol-330" className="flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 hover:bg-accent transition-all">
+                              <span className="text-2xl font-bold">330 мл</span>
+                              <span className="text-lg text-primary font-semibold mt-1">89 ₽</span>
+                              <span className="text-xs text-muted-foreground mt-1">Порционная бутылка</span>
+                            </Label>
+                          </div>
+                          <div className="relative">
+                            <RadioGroupItem value="500" id="vol-500" className="peer sr-only" />
+                            <Label htmlFor="vol-500" className="flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 hover:bg-accent transition-all">
+                              <span className="text-2xl font-bold">500 мл</span>
+                              <span className="text-lg text-primary font-semibold mt-1">129 ₽</span>
+                              <span className="text-xs text-muted-foreground mt-1">Стандартная бутылка</span>
+                            </Label>
+                          </div>
+                          <div className="relative">
+                            <RadioGroupItem value="1000" id="vol-1000" className="peer sr-only" />
+                            <Label htmlFor="vol-1000" className="flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 hover:bg-accent transition-all">
+                              <span className="text-2xl font-bold">1 литр</span>
+                              <span className="text-lg text-primary font-semibold mt-1">199 ₽</span>
+                              <span className="text-xs text-muted-foreground mt-1">Семейная упаковка</span>
+                            </Label>
+                          </div>
+                          <div className="relative">
+                            <RadioGroupItem value="2000" id="vol-2000" className="peer sr-only" />
+                            <Label htmlFor="vol-2000" className="flex flex-col items-center justify-center p-4 border-2 rounded-lg cursor-pointer peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 hover:bg-accent transition-all">
+                              <span className="text-2xl font-bold">2 литра</span>
+                              <span className="text-lg text-primary font-semibold mt-1">349 ₽</span>
+                              <span className="text-xs text-muted-foreground mt-1">Большая упаковка</span>
+                            </Label>
+                          </div>
+                        </div>
+                      </RadioGroup>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="quantity" className="text-lg font-semibold">Количество</Label>
+                      <div className="flex items-center gap-4">
+                        <Button 
+                          type="button" 
+                          size="icon" 
+                          variant="outline"
+                          onClick={() => setOrderForm({...orderForm, quantity: Math.max(1, orderForm.quantity - 1)})}
+                        >
+                          <Icon name="Minus" size={16} />
+                        </Button>
+                        <Input 
+                          id="quantity"
+                          type="number" 
+                          min="1"
+                          value={orderForm.quantity}
+                          onChange={(e) => setOrderForm({...orderForm, quantity: parseInt(e.target.value) || 1})}
+                          className="text-center text-xl font-semibold w-24"
+                        />
+                        <Button 
+                          type="button" 
+                          size="icon" 
+                          variant="outline"
+                          onClick={() => setOrderForm({...orderForm, quantity: orderForm.quantity + 1})}
+                        >
+                          <Icon name="Plus" size={16} />
+                        </Button>
+                      </div>
+                      {orderForm.quantity >= 5 && (
+                        <p className="text-sm text-primary font-semibold flex items-center gap-1">
+                          <Icon name="Tag" size={14} />
+                          Скидка 10% при заказе от 5 штук!
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="bg-primary/5 rounded-lg p-4 border-2 border-primary/20">
+                      <div className="flex justify-between items-center text-lg mb-2">
+                        <span className="text-muted-foreground">Цена за единицу:</span>
+                        <span className="font-semibold">{volumePrices[orderForm.volume]} ₽</span>
+                      </div>
+                      <div className="flex justify-between items-center text-lg mb-2">
+                        <span className="text-muted-foreground">Количество:</span>
+                        <span className="font-semibold">{orderForm.quantity} шт</span>
+                      </div>
+                      {orderForm.quantity >= 5 && (
+                        <div className="flex justify-between items-center text-lg mb-2">
+                          <span className="text-primary">Скидка 10%:</span>
+                          <span className="font-semibold text-primary">-{Math.round(volumePrices[orderForm.volume] * orderForm.quantity * 0.1)} ₽</span>
+                        </div>
+                      )}
+                      <div className="border-t border-primary/20 pt-2 mt-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xl font-bold">Итого:</span>
+                          <span className="text-3xl font-bold text-primary">{calculateTotal()} ₽</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 border-t pt-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="name">Ваше имя *</Label>
+                        <Input 
+                          id="name"
+                          placeholder="Иван Иванов"
+                          value={orderForm.name}
+                          onChange={(e) => setOrderForm({...orderForm, name: e.target.value})}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="phone">Телефон *</Label>
+                        <Input 
+                          id="phone"
+                          type="tel"
+                          placeholder="+7 (999) 123-45-67"
+                          value={orderForm.phone}
+                          onChange={(e) => setOrderForm({...orderForm, phone: e.target.value})}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="address">Адрес доставки *</Label>
+                        <Input 
+                          id="address"
+                          placeholder="Москва, ул. Примерная, д. 1, кв. 10"
+                          value={orderForm.address}
+                          onChange={(e) => setOrderForm({...orderForm, address: e.target.value})}
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <Button type="submit" size="lg" className="flex-1 text-lg">
+                        <Icon name="ShoppingCart" className="mr-2" size={20} />
+                        Оформить заказ на {calculateTotal()} ₽
+                      </Button>
+                      <Button type="button" size="lg" variant="outline" onClick={() => setIsOrderFormOpen(false)}>
+                        Отмена
+                      </Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
       </section>
 
@@ -386,7 +604,7 @@ const Index = () => {
           <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
             Закажите доставку свежего натурального айрана прямо сейчас
           </p>
-          <Button size="lg" variant="secondary" className="text-lg px-8">
+          <Button size="lg" variant="secondary" className="text-lg px-8" onClick={() => setIsOrderFormOpen(true)}>
             <Icon name="ShoppingCart" className="mr-2" size={24} />
             Оформить заказ
           </Button>
