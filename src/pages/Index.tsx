@@ -195,6 +195,7 @@ const Index = () => {
             <a href="#hero" className="hover:text-primary transition-colors">Главная</a>
             <a href="#about" className="hover:text-primary transition-colors">О продукте</a>
             <a href="#recipes" className="hover:text-primary transition-colors">Рецепты</a>
+            <a href="#reviews" className="hover:text-primary transition-colors">Отзывы</a>
           </nav>
           <Button size="lg" className="hidden md:flex" onClick={() => setIsOrderFormOpen(true)}>
             <Icon name="ShoppingCart" className="mr-2" size={20} />
@@ -595,6 +596,137 @@ const Index = () => {
               </Card>
             </div>
           )}
+        </div>
+      </section>
+
+      <section id="reviews" className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Отзывы покупателей</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Более 5000 довольных клиентов выбрали наш натуральный айран
+            </p>
+            <div className="flex items-center justify-center gap-6 mt-8">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 mb-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Icon key={star} name="Star" size={24} className="fill-secondary text-secondary" />
+                  ))}
+                </div>
+                <p className="text-3xl font-bold">4.9 / 5</p>
+                <p className="text-sm text-muted-foreground">Средняя оценка</p>
+              </div>
+              <div className="h-16 w-px bg-border" />
+              <div className="text-center">
+                <p className="text-3xl font-bold">5,247</p>
+                <p className="text-sm text-muted-foreground">Отзывов</p>
+              </div>
+              <div className="h-16 w-px bg-border" />
+              <div className="text-center">
+                <p className="text-3xl font-bold">98%</p>
+                <p className="text-sm text-muted-foreground">Рекомендуют</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                name: "Елена Петрова",
+                avatar: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/b0c3d3b9-cb24-4139-9d6b-a3381cbb9804.jpg",
+                rating: 5,
+                date: "2 недели назад",
+                text: "Это лучший айран, который я пробовала! Настоящий вкус детства. Заказываю уже третий месяц подряд. Помог восстановиться после болезни, заметила улучшение пищеварения.",
+                verified: true
+              },
+              {
+                name: "Дмитрий Соколов",
+                avatar: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/dac7b600-cd8c-465d-9393-6e0760994ce9.jpg",
+                rating: 5,
+                date: "1 месяц назад",
+                text: "Как спортсмен, ценю натуральные продукты. Айран идеально восстанавливает после тренировок. Белок, пробиотики, минералы - всё что нужно. Вкус отличный, консистенция густая, как надо!",
+                verified: true
+              },
+              {
+                name: "Мария Ивановна",
+                avatar: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/83b91255-4286-41d1-80f2-f08abe8bf94d.jpg",
+                rating: 5,
+                date: "3 недели назад",
+                text: "Внуки в восторге! Готовлю на нём окрошку всё лето. Напоминает тот айран, что мы пили в Кисловодске. Доставка быстрая, всегда свежий. Спасибо за качество!",
+                verified: true
+              },
+              {
+                name: "Артур Магомедов",
+                avatar: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/dac7b600-cd8c-465d-9393-6e0760994ce9.jpg",
+                rating: 5,
+                date: "5 дней назад",
+                text: "Я из Дагестана, знаю толк в айране. Этот - настоящий! Не водянистый магазинный, а густой, с правильной кислинкой. Рецептура соблюдена. Рекомендую всем кавказцам в Москве.",
+                verified: true
+              },
+              {
+                name: "Анна Кузнецова",
+                avatar: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/b0c3d3b9-cb24-4139-9d6b-a3381cbb9804.jpg",
+                rating: 4,
+                date: "1 неделю назад",
+                text: "Очень вкусный айран! Единственное - хотелось бы упаковку побольше, литровая заканчивается быстро. Но качество на высоте, буду заказывать ещё.",
+                verified: true
+              },
+              {
+                name: "Сергей Михайлов",
+                avatar: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/dac7b600-cd8c-465d-9393-6e0760994ce9.jpg",
+                rating: 5,
+                date: "2 дня назад",
+                text: "Помог справиться с проблемами ЖКТ. Врач рекомендовал натуральные кисломолочные продукты - этот айран оказался идеальным решением. Пью каждый день уже месяц, результат отличный!",
+                verified: true
+              }
+            ].map((review, index) => (
+              <Card key={index} className="hover:shadow-lg transition-all duration-300 animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                <CardHeader>
+                  <div className="flex items-start gap-4">
+                    <img 
+                      src={review.avatar}
+                      alt={review.name}
+                      className="w-14 h-14 rounded-full object-cover"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <CardTitle className="text-lg">{review.name}</CardTitle>
+                        {review.verified && (
+                          <div className="bg-primary/10 text-primary px-2 py-0.5 rounded-full flex items-center gap-1">
+                            <Icon name="CheckCircle" size={12} />
+                            <span className="text-xs font-semibold">Проверено</span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="flex gap-0.5">
+                          {[...Array(5)].map((_, i) => (
+                            <Icon 
+                              key={i} 
+                              name="Star" 
+                              size={14} 
+                              className={i < review.rating ? "fill-secondary text-secondary" : "text-muted"} 
+                            />
+                          ))}
+                        </div>
+                        <span className="text-xs text-muted-foreground">{review.date}</span>
+                      </div>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">{review.text}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button variant="outline" size="lg" onClick={() => setIsOrderFormOpen(true)}>
+              <Icon name="MessageSquare" className="mr-2" size={20} />
+              Оставить отзыв после покупки
+            </Button>
+          </div>
         </div>
       </section>
 
