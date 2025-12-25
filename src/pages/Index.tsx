@@ -27,8 +27,20 @@ interface OrderFormData {
   address: string;
 }
 
+interface BlogPost {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+  readTime: string;
+  date: string;
+  content: string[];
+}
+
 const Index = () => {
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost | null>(null);
   const [isOrderFormOpen, setIsOrderFormOpen] = useState(false);
   const [orderForm, setOrderForm] = useState<OrderFormData>({
     volume: "500",
@@ -158,6 +170,73 @@ const Index = () => {
     }
   ];
 
+  const blogPosts: BlogPost[] = [
+    {
+      id: 1,
+      title: "Айран в лечении туберкулёза: научные факты",
+      description: "Как натуральный айран помогает укрепить лёгкие и поддержать организм при туберкулёзе",
+      image: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/03573aaa-9dae-456d-9b32-0a9dfcafa57b.jpg",
+      category: "Здоровье",
+      readTime: "5 мин",
+      date: "15 декабря 2024",
+      content: [
+        "Туберкулёз — серьёзное инфекционное заболевание, требующее комплексного подхода к лечению. Наряду с медикаментозной терапией, важную роль играет правильное питание.",
+        "Айран содержит живые молочнокислые бактерии, которые укрепляют иммунитет. Пробиотики помогают организму противостоять инфекции и восстанавливаться быстрее.",
+        "Белок в составе айрана необходим для регенерации тканей лёгких. Кальций и витамины группы B поддерживают общее состояние здоровья.",
+        "Исследования показывают, что регулярное употребление натуральных кисломолочных продуктов улучшает показатели выздоровления на 20-30%.",
+        "Важно выбирать натуральный айран без консервантов и добавок. Живые бактерии сохраняются только в свежем продукте с коротким сроком годности."
+      ]
+    },
+    {
+      id: 2,
+      title: "Пробиотики в айране: польза для пищеварения",
+      description: "Как живые бактерии в айране восстанавливают микрофлору кишечника и улучшают здоровье",
+      image: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/9e42317f-982e-4bb0-bc62-d253726daae2.jpg",
+      category: "Питание",
+      readTime: "4 мин",
+      date: "10 декабря 2024",
+      content: [
+        "Кишечная микрофлора — основа крепкого иммунитета и хорошего самочувствия. Пробиотики в айране помогают восстановить баланс полезных бактерий.",
+        "В 100 мл натурального айрана содержится до 1 миллиарда живых молочнокислых бактерий. Они заселяют кишечник и вытесняют патогенную микрофлору.",
+        "Регулярное употребление айрана улучшает пищеварение, устраняет вздутие и нормализует стул. Это особенно важно после приёма антибиотиков.",
+        "Пробиотики синтезируют витамины группы B и K, улучшают усвоение кальция и других минералов из пищи.",
+        "Для максимальной пользы пейте айран натощак за 30 минут до еды или между приёмами пищи."
+      ]
+    },
+    {
+      id: 3,
+      title: "История айрана: от кавказских гор до вашего стола",
+      description: "Древние традиции приготовления целебного напитка горцев Кавказа",
+      image: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/a241b3a4-b62a-439d-b8a2-6f5aec2c0056.jpg",
+      category: "Традиции",
+      readTime: "6 мин",
+      date: "5 декабря 2024",
+      content: [
+        "Айран — напиток с тысячелетней историей. Горцы Кавказа готовили его из молока овец и коров, пасущихся на высокогорных лугах.",
+        "Секрет долголетия кавказцев кроется в ежедневном употреблении натуральных кисломолочных продуктов. Айран был основой рациона.",
+        "Традиционно айран готовили в бурдюках из козьей кожи. Закваска передавалась из поколения в поколение и хранилась в каждой семье.",
+        "Чистый горный воздух, экологически чистое молоко и уникальные молочнокислые бактерии создавали неповторимый вкус и целебные свойства.",
+        "Мы сохранили аутентичную рецептуру, используя только натуральное молоко и традиционную закваску без добавок."
+      ]
+    },
+    {
+      id: 4,
+      title: "Айран для спортсменов: восстановление после тренировок",
+      description: "Почему атлеты выбирают айран для восстановления мышц и энергии",
+      image: "https://cdn.poehali.dev/projects/ca318f8d-3b02-499e-b4fe-50fd5a3ea24c/files/dac7b600-cd8c-465d-9393-6e0760994ce9.jpg",
+      category: "Спорт",
+      readTime: "5 мин",
+      date: "1 декабря 2024",
+      content: [
+        "После интенсивной тренировки организму нужны белки, электролиты и углеводы. Айран содержит все эти компоненты в идеальной пропорции.",
+        "Белок в айране легко усваивается и помогает восстанавливать мышечные волокна. Это натуральная альтернатива протеиновым коктейлям.",
+        "Калий и магний восполняют потери минералов с потом, предотвращают судороги и поддерживают работу сердца.",
+        "Пробиотики улучшают усвоение питательных веществ и укрепляют иммунитет, что особенно важно при интенсивных нагрузках.",
+        "Айран освежает, утоляет жажду и даёт энергию без тяжести в желудке. Пейте через 30-60 минут после тренировки."
+      ]
+    }
+  ];
+
   const healthBenefits = [
     {
       icon: "Heart",
@@ -196,6 +275,7 @@ const Index = () => {
             <a href="#about" className="hover:text-primary transition-colors">О продукте</a>
             <a href="#recipes" className="hover:text-primary transition-colors">Рецепты</a>
             <a href="#reviews" className="hover:text-primary transition-colors">Отзывы</a>
+            <a href="#blog" className="hover:text-primary transition-colors">Блог</a>
           </nav>
           <Button size="lg" className="hidden md:flex" onClick={() => setIsOrderFormOpen(true)}>
             <Icon name="ShoppingCart" className="mr-2" size={20} />
@@ -727,6 +807,122 @@ const Index = () => {
               Оставить отзыв после покупки
             </Button>
           </div>
+        </div>
+      </section>
+
+      <section id="blog" className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Блог о здоровье</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Полезные статьи о свойствах айрана, правильном питании и здоровом образе жизни
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {blogPosts.map((post, index) => (
+              <Card 
+                key={post.id} 
+                className="overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group animate-fade-in"
+                style={{ animationDelay: `${index * 100}ms` }}
+                onClick={() => setSelectedBlogPost(post)}
+              >
+                <div className="relative overflow-hidden h-64">
+                  <img 
+                    src={post.image} 
+                    alt={post.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute top-4 left-4 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-semibold">
+                    {post.category}
+                  </div>
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-2xl group-hover:text-primary transition-colors">{post.title}</CardTitle>
+                  <CardDescription className="text-base">{post.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Icon name="Calendar" size={14} />
+                      {post.date}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Icon name="Clock" size={14} />
+                      {post.readTime}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {selectedBlogPost && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setSelectedBlogPost(null)}>
+              <Card className="max-w-4xl w-full max-h-[90vh] overflow-y-auto animate-scale-in" onClick={(e) => e.stopPropagation()}>
+                <div className="relative h-80">
+                  <img 
+                    src={selectedBlogPost.image} 
+                    alt={selectedBlogPost.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <Button 
+                    size="icon" 
+                    variant="secondary" 
+                    className="absolute top-4 right-4"
+                    onClick={() => setSelectedBlogPost(null)}
+                  >
+                    <Icon name="X" size={20} />
+                  </Button>
+                  <div className="absolute bottom-4 left-4 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-semibold">
+                    {selectedBlogPost.category}
+                  </div>
+                </div>
+                <CardHeader className="border-b">
+                  <CardTitle className="text-4xl">{selectedBlogPost.title}</CardTitle>
+                  <CardDescription className="text-lg">{selectedBlogPost.description}</CardDescription>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
+                    <div className="flex items-center gap-1">
+                      <Icon name="Calendar" size={14} />
+                      {selectedBlogPost.date}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Icon name="Clock" size={14} />
+                      {selectedBlogPost.readTime}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-8">
+                  <div className="prose prose-lg max-w-none">
+                    {selectedBlogPost.content.map((paragraph, i) => (
+                      <p key={i} className="text-lg leading-relaxed mb-6 text-muted-foreground">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                  <div className="border-t pt-8 mt-8">
+                    <div className="bg-primary/5 rounded-xl p-6 border-2 border-primary/20">
+                      <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <Icon name="ShoppingBag" size={24} className="text-primary" />
+                        Попробуйте настоящий айран
+                      </h3>
+                      <p className="text-muted-foreground mb-6">
+                        Оцените все целебные свойства натурального айрана на собственном опыте
+                      </p>
+                      <Button size="lg" onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedBlogPost(null);
+                        setIsOrderFormOpen(true);
+                      }}>
+                        <Icon name="ShoppingCart" className="mr-2" size={20} />
+                        Заказать айран
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </div>
       </section>
 
